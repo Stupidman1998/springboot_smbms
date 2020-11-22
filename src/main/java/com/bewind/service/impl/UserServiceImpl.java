@@ -5,7 +5,10 @@ import com.bewind.pojo.User;
 import com.bewind.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,6 +31,24 @@ public class UserServiceImpl implements UserService {
             }
         }
         return user;
+    }
+
+//    @Override
+////    public int userAdd(String userCode, String userName, String userPassword, Integer gender, Date birthday,
+////                       String phone, String address, Integer userRole, Integer createBy, Date creationDate) {
+////        return userMapper.userAdd(userCode,userName,userPassword,gender,birthday,phone,address,userRole,createBy,creationDate);
+////    }
+
+    @Override
+    @Transactional
+    public int userAdd(User user) {
+        return userMapper.userAdd(user);
+    }
+
+    @Override
+    public boolean userCodeExist(String userCode) {
+        User user = userMapper.getLoginUser(userCode);
+        return user != null;
     }
 
     @Override

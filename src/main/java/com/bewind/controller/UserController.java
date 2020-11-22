@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -81,6 +82,43 @@ public class UserController {
         return "useradd";
     }
 
+    /**
+     * ajax检验用户是否存在
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/userCodeExist")
+    public String userCodeExist(@RequestParam("userCode")String userCode){
+        boolean exist = userService.userCodeExist(userCode);
+        String json = JSON.toJSONString(exist);
+        return json;
+    }
+
+    /**
+     * 点击保存按钮提交表单后执行的请求，将数据保存至数据库
+     * @return
+     */
+//    @RequestMapping("/useradd")
+//    public String useradd(@RequestParam("userCode")String userCode,@RequestParam("userName")String userName,
+//                          @RequestParam("userPassword")String userPassword,@RequestParam("gender")Integer gender,
+//                          @RequestParam("birthday")Date birthday,@RequestParam("phone")String phone,
+//                          @RequestParam("address")String address,@RequestParam("userRole")Integer userRole,
+//                          @ModelAttribute("userSession")User userSession){
+//        //还需要从Session中获得当前用户id，和new创建日期。
+//        Integer createBy = userSession.getId();
+//        Date creationDate = new Date();
+//        int i = userService.userAdd(userCode, userName, userPassword, gender, birthday, phone, address, userRole, createBy, creationDate);
+//        return "redirect:userQuery";
+//    }
+    @RequestMapping("/useradd")
+    public String useradd(User user,@ModelAttribute("userSession") User userSession) {
+        //还需要从Session中获得当前用户id，和new创建日期。
+        user.setCreateBy(userSession.getId());
+        user.setCreationDate(new Date());
+        userService.userAdd(user);
+        return "redirect:userQuery";
+    }
+
 //    @ResponseBody
 //    @RequestMapping("/delUser")
 //    public String delUser(@RequestParam("uid") Integer uid){
@@ -90,4 +128,20 @@ public class UserController {
 //        String json = JSON.toJSONString(hashMap);
 //        return json;
 //    }
+
+    @RequestMapping("/viewUser")
+    public String viewUser(){
+        return "userview";
+    }
+
+    @RequestMapping("/modifyUser")
+    public String modifyUser(){
+        return "usermodify";
+    }
+
+//    @RequestMapping("/deleteUser")
+//    public String deleteUser(){
+//        return "userview";
+//    }
+
 }
