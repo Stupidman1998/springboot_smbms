@@ -26,7 +26,8 @@
              </div>
 			 <div>
                     <label for="data">出生日期：</label>
-                    <input type="text" Class="Wdate" id="birthday" name="birthday" th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}"/>
+<!--                    <input type="text" Class="Wdate" id="birthday" name="birthday" th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}"/>-->
+                    <input type="date" Class="Wdate" id="birthday" name="birthday" th:value="${#dates.format(user.birthday,'yyyy-MM-dd')}"/>
                     <font color="red"></font>
               </div>
 			

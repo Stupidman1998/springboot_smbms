@@ -20,4 +20,10 @@ public interface UserService {
 
     int userAdd(User user);
 
+    User getUserById(Integer uid);
+
+    int deleteById(Integer id);
+
+    int updateUser(User user);
+
 }

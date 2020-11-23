@@ -53,10 +53,10 @@ public class UserController {
         model.addAttribute("currentPageNo",pageIndex);
         model.addAttribute("isPrev", page.isHasPreviousPage());
         model.addAttribute("isNext", page.isHasNextPage());
-        System.out.println(page.getPages());
-        System.out.println(pageIndex);
-        System.out.println(page.isHasPreviousPage());
-        System.out.println(page.isHasNextPage());
+//        System.out.println(page.getPages());
+//        System.out.println(pageIndex);
+//        System.out.println(page.isHasPreviousPage());
+//        System.out.println(page.isHasNextPage());
         int[] counts = new int[page.getPages()];
         for (int i = 0; i < counts.length; i++) {
             counts[i] = i+1;
@@ -119,29 +119,57 @@ public class UserController {
         return "redirect:userQuery";
     }
 
-//    @ResponseBody
-//    @RequestMapping("/delUser")
-//    public String delUser(@RequestParam("uid") Integer uid){
-//        HashMap<String, String> hashMap = new HashMap<>();
-//        hashMap.put("delResult","");
-//
-//        String json = JSON.toJSONString(hashMap);
-//        return json;
-//    }
+    @ResponseBody
+    @RequestMapping("/delUser")
+    public String delUser(@RequestParam("uid") Integer uid){
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (uid<=0){
+            hashMap.put("delResult","notexist");
+        }
+        else {
+            int i = userService.deleteById(uid);
+            if (i != 0) {
+                hashMap.put("delResult", "true");
+            } else {
+                hashMap.put("delResult", "false");
+            }
+        }
+        String json = JSON.toJSONString(hashMap);
+        return json;
+    }
 
     @RequestMapping("/viewUser")
-    public String viewUser(){
+    public String viewUser(@RequestParam("uid")Integer uid,Model model){
+        User user = userService.getUserById(uid);
+        model.addAttribute("user",user);
         return "userview";
     }
 
-    @RequestMapping("/modifyUser")
-    public String modifyUser(){
+    /**
+     * 用户修改页面入口
+     * @param uid
+     * @return
+     */
+    @RequestMapping("/modify")
+    public String modifyUser(@RequestParam("uid")Integer uid,Model model){
+        User user = userService.getUserById(uid);
+        model.addAttribute(user);
         return "usermodify";
     }
 
-//    @RequestMapping("/deleteUser")
-//    public String deleteUser(){
-//        return "userview";
-//    }
-
+    /**
+     * 保存修改记录
+     * @param user
+     * @return
+     */
+    @PostMapping("/modifyexe")
+    public String saveMoidfy(User user){
+        int i = userService.updateUser(user);
+        if (i!=0){
+            System.out.println("修改成功");
+            return "redirect:userQuery";
+        }
+        System.out.println("修改失败");
+        return "usermodify";
+    }
 }

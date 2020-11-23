@@ -48,4 +48,14 @@ public interface UserMapper {
             "VALUES(#{user.userCode},#{user.userName},#{user.userPassword},#{user.gender},#{user.birthday}," +
             "#{user.phone},#{user.address},#{user.userRole}," + "#{user.createBy},#{user.creationDate})")
     int userAdd(@Param("user") User user);
+
+    @Select("select u.*,r.roleName as userRoleName from smbms_user u,smbms_role r where u.userRole = r.id and u.id=#{uid}")
+    User getUserById(@Param("uid")Integer uid);
+
+    @Delete("DELETE FROM smbms_user WHERE id=#{uid}")
+    int deleteById(@Param("uid") Integer uid);
+
+    @Update("UPDATE smbms_user SET userName=#{user.userName},gender=#{user.gender},birthday=#{user.birthday}," +
+            "phone=#{user.phone},address=#{user.address},userRole=#{user.userRole} WHERE id = #{user.id}")
+    int updateUser(@Param("user") User user);
 }

@@ -41,6 +41,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public int updateUser(User user) {
+        return userMapper.updateUser(user);
+    }
+
+    @Override
+    @Transactional
+    public int deleteById(Integer id) {
+        return userMapper.deleteById(id);
+    }
+
+    @Override
+    public User getUserById(Integer uid) {
+        return userMapper.getUserById(uid);
+    }
+
+    @Override
+    @Transactional
     public int userAdd(User user) {
         return userMapper.userAdd(user);
     }
